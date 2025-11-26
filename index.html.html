@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Date & Time Display</title>
+  <style>
+    /* Page styling */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    /* Container box */
+    #clockBox {
+      background: white;
+      padding: 30px 50px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+      text-align: center;
+    }
+
+    /* Date and time text */
+    #date, #time {
+      font-size: 2rem;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="clockBox">
+    <div id="date">Loading date...</div>
+    <div id="time">Loading time...</div>
+  </div>
+
+    <script>
+    /* updateBackground(): Changes page colors based on the current hour */
+    function updateBackground(currentHour) {
+      const body = document.body;
+      const clockBox = document.getElementById("clockBox");
+
+      /*
+        Time rules:
+        - 5:00 AM  to 11:59 AM  -> White background
+        - 12:00 PM to 5:59  PM  -> Yellow background
+        - 6:00 PM  to 4:59  AM  -> Purple background
+      */
+      if (currentHour >= 5 && currentHour < 12) {
+        body.style.backgroundColor = "white";
+        body.style.color = "black";
+        clockBox.style.backgroundColor = "white";
+      } else if (currentHour >= 12 && currentHour < 18) {
+        body.style.backgroundColor = "#fff5a3"; // soft yellow
+        body.style.color = "black";
+        clockBox.style.backgroundColor = "white";
+      } else {
+        body.style.backgroundColor = "#3b2466"; // deep purple
+        body.style.color = "white";
+        clockBox.style.backgroundColor = "#4b3377"; // slightly lighter purple box
+      }
+    }
+
+    /* updateClock(): Updates the date, time, and background every second */
+    function updateClock() {
+      const now = new Date(); // Get the current date and time
+
+      /* Format the date: Weekday, Month Day, Year */
+      const dateString = now.toLocaleDateString(undefined, {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      });
+
+      /* Format the time: HH:MM:SS AM/PM */
+      const timeString = now.toLocaleTimeString();
+
+      // Update background based on the current hour (0–23)
+      const currentHour = now.getHours();
+      updateBackground(currentHour);
+
+      // Display date and time on the page
+      document.getElementById("date").textContent = dateString;
+      document.getElementById("time").textContent = timeString;
+    }
+
+    /* setInterval: Calls updateClock() every 1000 ms (1 second) */
+    setInterval(updateClock, 1000);
+
+    /* Run immediately so user doesn't see 'Loading...' */
+    updateClock();
+  </script>
+</body>
+</html>
